@@ -50,6 +50,7 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
 
     // The order in which child ChannelOptions are applied is important they may depend on each other for validation
     // purposes.
+    // 子通道选项的顺序很重要，它们可能依赖于彼此进行验证。
     private final Map<ChannelOption<?>, Object> childOptions = new LinkedHashMap<ChannelOption<?>, Object>();
     private final Map<AttributeKey<?>, Object> childAttrs = new ConcurrentHashMap<AttributeKey<?>, Object>();
     private final ServerBootstrapConfig config = new ServerBootstrapConfig(this);
@@ -70,6 +71,8 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
 
     /**
      * Specify the {@link EventLoopGroup} which is used for the parent (acceptor) and the child (client).
+     * 
+     * 指定用于父（接收器）和子（客户端）的{@link EventLoopGroup}。
      */
     @Override
     public ServerBootstrap group(EventLoopGroup group) {
@@ -80,6 +83,9 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
      * Set the {@link EventLoopGroup} for the parent (acceptor) and the child (client). These
      * {@link EventLoopGroup}'s are used to handle all the events and IO for {@link ServerChannel} and
      * {@link Channel}'s.
+     * 
+     * 设置父（接收器）和子（客户端）的{@link EventLoopGroup}。
+     * 这些{@link EventLoopGroup}用于处理所有事件和I/O操作。
      */
     public ServerBootstrap group(EventLoopGroup parentGroup, EventLoopGroup childGroup) {
         super.group(parentGroup);
@@ -110,6 +116,9 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
     /**
      * Set the specific {@link AttributeKey} with the given value on every child {@link Channel}. If the value is
      * {@code null} the {@link AttributeKey} is removed
+     * 
+     * 在每个子{@link Channel}上设置给定的{@link AttributeKey}和值。
+     * 如果{@code value}为{@code null}，则移除指定{@code key}的属性。
      */
     public <T> ServerBootstrap childAttr(AttributeKey<T> childKey, T value) {
         ObjectUtil.checkNotNull(childKey, "childKey");
@@ -186,6 +195,7 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
         return this;
     }
 
+    // 用于处理服务器通道的接收器。
     private static class ServerBootstrapAcceptor extends ChannelInboundHandlerAdapter {
 
         private final EventLoopGroup childGroup;
@@ -208,7 +218,9 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
             // Task which is scheduled to re-enable auto-read.
             // It's important to create this Runnable before we try to submit it as otherwise the URLClassLoader may
             // not be able to load the class because of the file limit it already reached.
-            //
+            // 用于重新启用自动读取的任务。
+            // 在尝试提交之前，重要的是在尝试提交之前创建这个Runnable，否则URLClassLoader可能无法加载类，因为它的文件限制已经达到。
+            // 
             // See https://github.com/netty/netty/issues/1328
             enableAutoReadTask = new Runnable() {
                 @Override
@@ -282,6 +294,8 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
      * Return the configured {@link EventLoopGroup} which will be used for the child channels or {@code null}
      * if non is configured yet.
      *
+     * 返回用于子通道的{@link EventLoopGroup}，或者如果没有配置，则返回{@code null}。
+     * 
      * @deprecated Use {@link #config()} instead.
      */
     @Deprecated
